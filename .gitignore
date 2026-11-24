@@ -28,3 +28,6 @@ Thumbs.db
 build/
 dist/
 __pycache__/
+
+# The nvprobe test clip is a build input (build_local.sh packages it)
+!tools/nvprobe/clip_800x480.h264
