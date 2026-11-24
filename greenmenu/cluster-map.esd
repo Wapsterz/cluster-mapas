@@ -3,8 +3,9 @@
 # Custom Green Engineering Menu screen: phone map on the digital cluster
 # Attached to the top level of the green engineering menu, so it does not
 # depend on any other screen being installed.
-# Main -> ClusterMap, with two screens under it:
+# Main -> ClusterMap, with four screens under it:
 #   ClusterMapPicture  the picture switches
+#   ClusterMapPhones   Android Auto / CarPlay map on the cluster, ON / OFF
 #   ClusterMapOptions  on/off switches (scripts/menu_switch.sh)
 #   ClusterMapSupport  the rare entries (porting files, turn arrows)
 # The four entries most owners use stay on the first screen, numbered, so a
@@ -74,6 +75,25 @@ script
 script
     value   sys 1 0x0100 "/fs/sda0/ClusterMap/GEM/opt_theme_auto.sh"
     label   "7. Map follows the headlights (needs reboot)"
+
+###########################################################################################
+screen ClusterMapPhones ClusterMap
+
+script
+    value   sys 1 0x0100 "/fs/sda0/ClusterMap/GEM/opt_carplay_on.sh"
+    label   "1. CarPlay map on the cluster ON (takes effect now)"
+
+script
+    value   sys 1 0x0100 "/fs/sda0/ClusterMap/GEM/opt_carplay_off.sh"
+    label   "2. CarPlay map on the cluster OFF (takes effect now)"
+
+script
+    value   sys 1 0x0100 "/fs/sda0/ClusterMap/GEM/opt_map_on.sh"
+    label   "3. Android Auto map on the cluster ON (needs reboot)"
+
+script
+    value   sys 1 0x0100 "/fs/sda0/ClusterMap/GEM/opt_map_off.sh"
+    label   "4. Android Auto map on the cluster OFF (needs reboot)"
 
 ###########################################################################################
 screen ClusterMapOptions ClusterMap

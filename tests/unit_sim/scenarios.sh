@@ -103,7 +103,7 @@ echo "LEFT ${LEFT:-nothing}"
 # and an install after an uninstall
 run_update back; expect back CLUSTERMAP_INSTALL_OK
 # 5. the green menu scripts, as the menu starts them
-for s in status opt_hw_on opt_hw_off opt_keepmap_on opt_keepmap_off opt_map_off opt_map_on opt_stats_on opt_stats_off \
+for s in status opt_hw_on opt_hw_off opt_keepmap_on opt_keepmap_off opt_map_off opt_map_on opt_carplay_off opt_carplay_on opt_stats_on opt_stats_off \
          opt_theme_dark opt_theme_light opt_theme_auto full_frame_on full_frame_off full_frame_720p full_frame_1080p \
          switch_to_turn_by_turn savelogs collect_for_porting status; do
     [ -f $PKG/GEM/$s.sh ] || { res gem.$s FAIL missing; continue; }

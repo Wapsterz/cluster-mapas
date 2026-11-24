@@ -113,6 +113,8 @@ the card, and the `UNINSTALL` marker on the card removes everything.
 | ClusterMapPicture > 5, 6, 7. Map always light / always dark / follows the headlights | `GAL_SECONDARY_UI_THEME`. Google Maps; Waze stays dark. Reboot after |
 | ClusterMapOptions > 1, 2. Hardware decoder ON / OFF | `GAL_PLAYER_DECODER`. From the next phone connection |
 | ClusterMapOptions > 3, 4. Keep the phone's map ON / OFF | `GAL_PLAYER_REASSERT`, for "phone map for a moment, then the car's map". From the next phone connection |
+| ClusterMapPhones > 1, 2. CarPlay map on the cluster ON / OFF | `CLUSTERMAP_CARPLAY_MAP`. The CarPlay supervisor reads it every second: no reconnect, no reboot. OFF keeps the cluster on the car's own map; CarPlay on the centre screen is unaffected |
+| ClusterMapPhones > 3, 4. Android Auto map on the cluster ON / OFF | The same switch as ClusterMapOptions 5, 6 below (`GAL_DUALSCREEN_ENABLE`). Reboot after |
 | ClusterMapOptions > 5, 6. Cluster map OFF / ON | `GAL_DUALSCREEN_ENABLE`, for a wireless adapter that stops working with the map. Nothing is removed. Reboot after |
 | ClusterMapSupport > 1. Collect files for porting (quick) | About 2.5 MB, read only |
 | ClusterMapSupport > 2. Collect for porting, with Java image (55 MB, slow) | Only for a turn-arrows port |

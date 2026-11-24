@@ -73,11 +73,12 @@ card.
 
 The update also adds a **ClusterMap** screen to the green engineering menu
 (hold MENU > `Testmode` > `Green Developer Menu`): status, install, logs and
-uninstall on the first screen, and three screens under it:
+uninstall on the first screen, and four screens under it:
 
 | Screen | What is there |
 |---|---|
 | `ClusterMapPicture` | Sharper map on/off, map always light / always dark / following the headlights (reboot after) |
+| `ClusterMapPhones` | CarPlay map on the cluster ON / OFF (takes effect at once, phone stays connected), Android Auto map on the cluster ON / OFF (reboot after) |
 | `ClusterMapOptions` | Hardware decoder on/off, keep the phone's map on/off (reconnect the phone), cluster map off/on (reboot after) |
 | `ClusterMapSupport` | Files for porting, the turn-arrows switch, the hardware decoder check, performance figures in the log |
 

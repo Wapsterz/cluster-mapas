@@ -39,6 +39,24 @@ if [ -r "$PIDFILE" ]; then
 fi
 echo $$ > "$PIDFILE"
 
+# The green menu's CarPlay switch (ClusterMapPhones): CLUSTERMAP_CARPLAY_MAP=0
+# in gal_dualscreen.conf, next to this script, keeps the cluster on the car's
+# own map while CarPlay stays connected. Read every second, so the switch
+# works with the phone plugged in; no line means on.
+CONF=`dirname "$0"`/gal_dualscreen.conf
+MAP_WAS=1
+carplay_map_on() {
+    v=`sed -n 's/^[ 	]*CLUSTERMAP_CARPLAY_MAP[ 	]*=[ 	]*\([01]\)[ 	]*$/\1/p' "$CONF" 2>/dev/null | sed -n '1p'`
+    if [ "$v" = 0 ]; then
+        [ "$MAP_WAS" = 1 ] && log "CarPlay cluster map switched off in the menu"
+        MAP_WAS=0
+        return 1
+    fi
+    [ "$MAP_WAS" = 0 ] && log "CarPlay cluster map switched on in the menu"
+    MAP_WAS=1
+    return 0
+}
+
 player_running() { [ -n "$PLAYER_PID" ] && kill -0 "$PLAYER_PID" 2>/dev/null; }
 
 stop_player() {
@@ -64,7 +82,7 @@ log "started for dio_manager $OWNER"
 FAILS=0
 while kill -0 "$OWNER" 2>/dev/null; do
     CUR=`cat "$STATE" 2>/dev/null`
-    if [ "$CUR" = streaming ]; then
+    if [ "$CUR" = streaming ] && carplay_map_on; then
         if ! player_running; then
             if [ -n "$PLAYER_PID" ]; then
                 # It ended on its own while CarPlay still streams. Only a
@@ -88,7 +106,8 @@ while kill -0 "$OWNER" 2>/dev/null; do
             PLAYER_START=${SECONDS%%.*}
         fi
     else
-        [ -n "$PLAYER_PID" ] && stop_player "stream state ${CUR:-none}"
+        carplay_map_on  # logs a menu change even when nothing is streaming
+        [ -n "$PLAYER_PID" ] && stop_player "stream state ${CUR:-none}, or switched off in the menu"
         FAILS=0
     fi
     sleep 1

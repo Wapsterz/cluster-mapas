@@ -5,7 +5,8 @@
 # the next install from a card keeps it unless the card's file says otherwise.
 #
 #   menu_switch.sh KEY VALUE WHEN "what it is, as a sentence"
-# WHEN: phone  = read by the player, counts from the next phone connection
+# WHEN: now    = read every second by the CarPlay supervisor, counts within seconds
+#       phone  = read by the player, counts from the next phone connection
 #       reboot = read by gal at its start, counts after a reboot
 # Exit 0: switched. 3: nothing to change. Anything else: failed.
 HERE=`dirname "$0"`
@@ -24,16 +25,21 @@ case "$KEY=$VAL" in
     GAL_PLAYER_REASSERT=0|GAL_PLAYER_REASSERT=1) ;;
     GAL_PLAYER_STATS=0|GAL_PLAYER_STATS=1) ;;
     GAL_DUALSCREEN_ENABLE=0|GAL_DUALSCREEN_ENABLE=1) ;;
+    CLUSTERMAP_CARPLAY_MAP=0|CLUSTERMAP_CARPLAY_MAP=1) ;;
     GAL_SECONDARY_UI_THEME=0|GAL_SECONDARY_UI_THEME=1|GAL_SECONDARY_UI_THEME=2) ;;
-    *) echo "usage: $0 KEY VALUE phone|reboot \"what\"" >&2; exit 2 ;;
+    *) echo "usage: $0 KEY VALUE now|phone|reboot \"what\"" >&2; exit 2 ;;
 esac
 case "$WHEN" in
-    phone|reboot) ;;
-    *) echo "usage: $0 KEY VALUE phone|reboot \"what\"" >&2; exit 2 ;;
+    now|phone|reboot) ;;
+    *) echo "usage: $0 KEY VALUE now|phone|reboot \"what\"" >&2; exit 2 ;;
 esac
 
 if [ ! -r "$CONF" ]; then
     echo "The cluster map is not installed: install it first."
+    exit 1
+fi
+if [ "$KEY" = CLUSTERMAP_CARPLAY_MAP ] && [ ! -f "$PRELOAD_WRITE_DIR/carplay_cluster.sh" ]; then
+    echo "The CarPlay map is not installed on this unit. Nothing changed."
     exit 1
 fi
 NOW=`sed -n "s/^[ 	]*$KEY[ 	]*=[ 	]*\([^ 	]*\)[ 	]*\$/\1/p" "$CONF" | sed -n '1p'`
@@ -68,9 +74,9 @@ fi
 set_line "$OWNER" || echo "Note: the choice could not be saved for the next install; it holds until then."
 sync
 echo "$WHAT."
-if [ "$WHEN" = reboot ]; then
-    echo "Hold the power button for 10 seconds to reboot the unit."
-else
-    echo "Reconnect the phone: unplug it and plug it in again."
-fi
+case "$WHEN" in
+    reboot) echo "Hold the power button for 10 seconds to reboot the unit." ;;
+    now)    echo "No reconnect or reboot needed: it takes effect within a few seconds." ;;
+    *)      echo "Reconnect the phone: unplug it and plug it in again." ;;
+esac
 exit 0
